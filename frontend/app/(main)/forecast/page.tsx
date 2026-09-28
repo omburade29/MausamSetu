@@ -62,7 +62,7 @@ export default function ForecastPage() {
           <div className="grid gap-3 md:grid-cols-3">
             <MetricCard label="Block source" value="Coarse input" hint={payload.block_source_label} />
             <MetricCard label="Panchayat source" value={payload.model_version} hint={payload.data_source_label} />
-            <MetricCard label="Observation" value={payload.observation ? "Available" : "Not available"} hint={payload.observed_source_label} />
+            <MetricCard label="Observation" value={payload.variables.some((item) => item.observed !== null) ? "Available" : "Not available"} hint={payload.observed_source_label} />
           </div>
           <BlockShiftBoard variables={payload.variables} />
           <div className="flex flex-wrap items-center gap-3">

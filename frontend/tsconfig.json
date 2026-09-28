@@ -17,5 +17,13 @@
     "paths": { "@/*": ["./*"] }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
-  "exclude": ["node_modules"]
+  "exclude": [
+    "node_modules",
+    "legacy-vite",
+    "legacy_pages",
+    "components/ApiGate.tsx",
+    "components/Controls.tsx",
+    "components/StationMap.tsx",
+    "components/Shell.tsx"
+  ]
 }
