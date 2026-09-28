@@ -1,0 +1,7 @@
+# Optional geospatial stack for raster zonal statistics and gridded datasets.
+# Install after system GDAL libraries are available:
+#   pip install -r requirements-geo.txt
+geopandas>=1.0
+rasterio>=1.4
+xarray>=2024.1
+rioxarray>=0.17

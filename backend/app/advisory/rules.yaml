@@ -1,0 +1,148 @@
+version: 1
+disclaimer: >-
+  General decision support only. This advisory is not an official agronomic
+  prescription. An agriculture officer should review it before farmers rely on it.
+  Values used here are model-generated weather estimates, not official IMD forecasts.
+rules:
+  - id: heavy_rain_preparation
+    advisory_type: warning
+    severity: severe
+    title: Heavy rainfall preparation
+    reason: "Expected rainfall is {rainfall_mm:.1f} mm with rain probability {probability_of_rain:.0%}."
+    action: "Clear field drains, move harvested produce under cover, and postpone field operations until water recedes."
+    conditions:
+      - {field: probability_of_rain, op: gte, value: 0.70}
+      - {field: rainfall_mm, op: gte, value: 50}
+
+  - id: avoid_irrigation
+    advisory_type: irrigation
+    severity: watch
+    title: Delay irrigation
+    reason: "Expected rainfall is {rainfall_mm:.1f} mm with rain probability {probability_of_rain:.0%}."
+    action: "Skip irrigation today and keep harvested produce protected from wetting."
+    conditions:
+      - {field: probability_of_rain, op: gte, value: 0.70}
+      - {field: rainfall_mm, op: gte, value: 20}
+      - {field: rainfall_mm, op: lt, value: 50}
+
+  - id: light_rain_monitor
+    advisory_type: irrigation
+    severity: normal
+    title: Rainfall worth monitoring
+    reason: "A lighter rain amount of {rainfall_mm:.1f} mm is estimated."
+    action: "Check soil moisture before irrigating. Do not add water if the topsoil is already wet."
+    conditions:
+      - {field: rainfall_mm, op: gte, value: 5}
+      - {field: rainfall_mm, op: lt, value: 20}
+
+  - id: heat_stress
+    advisory_type: warning
+    severity: warning
+    title: Heat stress watch
+    reason: "Maximum temperature is estimated at {temperature_max_c:.1f} °C."
+    action: "Irrigate only if the soil is dry and rain is unlikely. Avoid midday field work and provide shade for livestock."
+    conditions:
+      - {field: temperature_max_c, op: gte, value: 38}
+
+  - id: cold_stress
+    advisory_type: warning
+    severity: warning
+    title: Cold stress watch
+    reason: "Minimum temperature is estimated at {temperature_min_c:.1f} °C."
+    action: "Protect nurseries and sensitive crops overnight. Delay sowing if seedlings are still in trays."
+    conditions:
+      - {field: temperature_min_c, op: lte, value: 10}
+
+  - id: strong_wind_spraying
+    advisory_type: spraying
+    severity: warning
+    title: Avoid pesticide spraying
+    reason: "Wind speed is estimated at {wind_speed_kmh:.1f} km/h."
+    action: "Do not spray pesticides or foliar nutrients. Wait for calmer conditions to reduce drift."
+    conditions:
+      - {field: wind_speed_kmh, op: gte, value: 30}
+
+  - id: fungal_humidity
+    advisory_type: pest_disease
+    severity: warning
+    title: Higher fungal disease risk
+    reason: "Humidity is {humidity_percent:.0f}% and has stayed high for {humidity_high_days:.0f} days."
+    action: "Scout for leaf spots and blight. Use only crop-labelled practices already recommended by the local KVK or agriculture office."
+    crops: [rice, wheat, cotton]
+    conditions:
+      - {field: humidity_percent, op: gte, value: 80}
+      - {field: humidity_high_days, op: gte, value: 2}
+
+  - id: clay_drainage
+    advisory_type: warning
+    severity: watch
+    title: Drainage on heavier soils
+    reason: "Estimated rainfall is {rainfall_mm:.1f} mm on a heavier soil ({soil_type})."
+    action: "Open field channels so water does not stand around the crop."
+    soils: [clay, clay loam, black cotton soil]
+    conditions:
+      - {field: rainfall_mm, op: gte, value: 25}
+
+  - id: sandy_heat_irrigation
+    advisory_type: irrigation
+    severity: watch
+    title: Sandy soil moisture check
+    reason: "Maximum temperature is {temperature_max_c:.1f} °C and expected rain is only {rainfall_mm:.1f} mm."
+    action: "Check sandy soil moisture. Light irrigation may be needed if the forecast stays dry."
+    soils: [sandy loam, sand]
+    conditions:
+      - {field: temperature_max_c, op: gte, value: 34}
+      - {field: rainfall_mm, op: lt, value: 5}
+      - {field: probability_of_rain, op: lt, value: 0.4}
+
+  - id: sowing_window
+    advisory_type: sowing
+    severity: normal
+    title: Sowing moisture check
+    reason: "This crop is at the sowing stage and expected rainfall is {rainfall_mm:.1f} mm."
+    action: "Sow only if seed-zone moisture is adequate. If heavy rain is likely, wait so seed is not buried in mud."
+    stages: [sowing, nursery, transplanting]
+    conditions:
+      - {field: rainfall_mm, op: gte, value: 5}
+      - {field: rainfall_mm, op: lt, value: 40}
+
+  - id: fertilizer_delay
+    advisory_type: fertilizer
+    severity: watch
+    title: Delay fertilizer application
+    reason: "Expected rainfall of {rainfall_mm:.1f} mm can wash top-dressed fertilizer off the field."
+    action: "Postpone fertilizer top dressing until the rainy spell eases."
+    conditions:
+      - {field: rainfall_mm, op: gte, value: 20}
+      - {field: probability_of_rain, op: gte, value: 0.6}
+
+  - id: harvest_delay
+    advisory_type: harvesting
+    severity: warning
+    title: Delay harvest and protect produce
+    reason: "Rain probability is {probability_of_rain:.0%} during the harvest stage."
+    action: "Delay cutting if grain or bolls are ready and rain is likely. Cover picked produce."
+    stages: [harvest, grain filling, boll development]
+    conditions:
+      - {field: probability_of_rain, op: gte, value: 0.6}
+      - {field: rainfall_mm, op: gte, value: 10}
+
+  - id: wheat_rabi_prep
+    advisory_type: sowing
+    severity: normal
+    title: Rabi wheat preparation
+    reason: "Wheat is not in its main growing window this month (month {month:.0f})."
+    action: "Use this period for land preparation and seed planning. Do not treat kharif advisories as wheat-season guidance."
+    crops: [wheat]
+    conditions:
+      - {field: month, op: gte, value: 8}
+      - {field: month, op: lte, value: 10}
+
+  - id: low_confidence
+    advisory_type: confidence
+    severity: watch
+    title: Low confidence estimate
+    reason: "Forecast confidence is {confidence_score:.0%}."
+    action: "Verify locally before taking high-cost action."
+    conditions:
+      - {field: confidence_score, op: lt, value: 0.5}

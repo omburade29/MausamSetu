@@ -1,0 +1,40 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: light;
+}
+
+body {
+  margin: 0;
+  background: #eef3f8;
+  color: #0f172a;
+  font-family: "Segoe UI", "Nirmala UI", sans-serif;
+}
+
+:focus-visible {
+  outline: 2px solid #0f766e;
+  outline-offset: 2px;
+}
+
+::selection {
+  background: #99f6e4;
+  color: #042f2e;
+}
+
+@media print {
+  body {
+    background: white;
+  }
+  .no-print {
+    display: none !important;
+  }
+}
+
+.leaflet-container {
+  height: 100%;
+  width: 100%;
+  background: #e8eef4;
+  font-family: "Segoe UI", "Nirmala UI", sans-serif;
+}
