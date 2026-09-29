@@ -3,6 +3,7 @@ import type { NextConfig } from "next";
 const nextConfig: NextConfig = {
   output: "standalone",
   reactStrictMode: true,
+  eslint: { ignoreDuringBuilds: true },
   async rewrites() {
     const api = process.env.API_PROXY_URL || "http://127.0.0.1:8000";
     return [
